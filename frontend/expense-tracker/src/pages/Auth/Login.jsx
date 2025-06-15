@@ -32,7 +32,7 @@ console.log(email)
 
   return (
     <AuthLayout>
-      <div className=' lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center '>
+      <div className='  flex flex-col justify-center lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 '>
         <h3 className='text-xl font-semibold text-black '>Welcome Back</h3>
         <p className='text-xs text-slate-700 mt-[5px] mb-6'>Please enter Your login details</p>
 
@@ -60,11 +60,14 @@ console.log(email)
 
           {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
 
-          <button type='submit' className='btn-primary'>LOGIN</button>
 
-          <p className='text-[13px] text-slate-800 mt-3'>Don't have an accout?{" "}
-            <Link className='font-medium text-primary underline' to='/signup'>SignUp</Link>
-          </p>
+          <div className="flex flex-col items-center mt-4">
+            <button type='submit' className='btn-primary'>LOGIN</button>
+
+            <p className='text-[13px] text-slate-800 mt-3'>Doesn't have an accout?{" "}
+              <Link className='font-medium text-primary underline' to='/signup'>Sign Up</Link>
+            </p>
+          </div>
         </form>
 
       </div>
