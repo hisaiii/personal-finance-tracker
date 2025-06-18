@@ -4,6 +4,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
+import { fileURLToPath } from 'url'
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,13 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 
 app.use("/api/v1/auth",authRoutes)
+
+// ES Module fix for __dirname
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Serve uploads folder
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 // 👉 Start the server
 app.listen(PORT, () => {
