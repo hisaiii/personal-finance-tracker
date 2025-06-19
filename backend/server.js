@@ -5,6 +5,9 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
 import { fileURLToPath } from 'url'
+import incomeRoutes from './routes/incomeRoutes.js'
+import exopenseRoutes from './routes/expenseRoutes.js'
+
 
 // Load environment variables
 dotenv.config();
@@ -27,6 +30,10 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 
 app.use("/api/v1/auth",authRoutes)
+app.use("/api/v1/income",incomeRoutes)
+app.use("/api/v1/expense",exopenseRoutes)
+
+
 
 // ES Module fix for __dirname
 const __filename = fileURLToPath(import.meta.url)
