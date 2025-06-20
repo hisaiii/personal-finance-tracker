@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js'
 import { fileURLToPath } from 'url'
 import incomeRoutes from './routes/incomeRoutes.js'
 import exopenseRoutes from './routes/expenseRoutes.js'
+import dashboardRoutes from './routes/dashboardRoutes.js'
 
 
 // Load environment variables
@@ -32,7 +33,7 @@ const PORT = process.env.PORT || 5000;
 app.use("/api/v1/auth",authRoutes)
 app.use("/api/v1/income",incomeRoutes)
 app.use("/api/v1/expense",exopenseRoutes)
-
+app.use("/api/v1/dashboard",dashboardRoutes)
 
 
 // ES Module fix for __dirname
