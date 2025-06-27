@@ -8,7 +8,10 @@ const DashboardLayout = ({ children, activeMenu }) => {
 
   return (
     <div className="">
-      <Navbar activeMenu={activeMenu}
+
+   {/* i removed passign active menu to navbar as it doesnt matter so far */}
+
+      <Navbar
        />
 
       {user && (

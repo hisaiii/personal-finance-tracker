@@ -9,7 +9,11 @@ import { LuHandCoins, LuWalletMinimal } from 'react-icons/lu'
 import { IoMdCard } from 'react-icons/io'
 import { addThousandSeparator } from '../../utils/helper.js'
 import RecentTransactions from '../../components/Dashboard/RecentTransactions.jsx'
-
+import FinanceOverview from '../../components/Dashboard/FinanceOverview.jsx'
+import ExpenseTransactions from '../../components/Dashboard/ExpenseTransactions.jsx'
+import Last30DaysExpense from '../../components/Dashboard/Last30DaysExpense.jsx'
+import Last60DaysIncome from '../../components/Dashboard/Last60DaysIncome.jsx'
+import RecentIncome from '../../components/Dashboard/RecentIncome.jsx'
 const Home = () => {
   useUserAuth()
 
@@ -52,31 +56,57 @@ const Home = () => {
       {/* {console.log("Dashboard Data:", dashboardData)} */}
       <div className='my-5 mx-auto'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-        <InfoCard
-          icon={<IoMdCard />}
-          label="Total Balance"
-          value={addThousandSeparator(dashboardData?.totalBalance || 0)}
-          color="bg-primary"
-        />
-        <InfoCard
-          icon={<LuWalletMinimal />}
-          label="Total Income"
-          value={addThousandSeparator(dashboardData?.totalIncome || 0)}
-          color="bg-orange-500"
-        />
-        <InfoCard
-          icon={<LuHandCoins />}
-          label="Total Expense"
-          value={addThousandSeparator(dashboardData?.totalExpenses || 0)}
-          color="bg-red-500"
-        />
+          <InfoCard
+            icon={<IoMdCard />}
+            label="Total Balance"
+            value={addThousandSeparator(dashboardData?.totalBalance || 0)}
+            color="bg-primary"
+          />
+          <InfoCard
+            icon={<LuWalletMinimal />}
+            label="Total Income"
+            value={addThousandSeparator(dashboardData?.totalIncome || 0)}
+            color="bg-orange-500"
+          />
+          <InfoCard
+            icon={<LuHandCoins />}
+            label="Total Expense"
+            value={addThousandSeparator(dashboardData?.totalExpenses || 0)}
+            color="bg-red-500"
+          />
         </div>
+
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-6'>
           <RecentTransactions
-             transactions={dashboardData?.recentTransactions}
-             onSeeMore={()=>
+            transactions={dashboardData?.recentTransactions}
+            onSeeMore={() =>
               navigate("/expense")
-             }
+            }
+          />
+          <FinanceOverview
+            totalBalance={dashboardData?.totalBalance || 0}
+            totalIncome={dashboardData?.totalIncome || 0}
+            totalExpense={dashboardData?.totalExpenses || 0}
+          />
+          <ExpenseTransactions
+            transactions={dashboardData?.last30DaysExpenses?.transactions || []}
+            onSeeMore={() =>
+              navigate("/expense")
+            }
+          />
+          <Last30DaysExpense
+            data={dashboardData?.last30DaysExpenses?.transactions || []}
+          />
+          <Last60DaysIncome
+            data={dashboardData?.last60DaysIncome?.transactions || []}
+            total={dashboardData?.last60DaysIncome?.total || 0}
+          />
+
+          <RecentIncome
+            data={dashboardData?.last60DaysIncome?.transactions || []}
+            onSeeMore={() =>
+              navigate("/income")
+            }
           />
 
         </div>
