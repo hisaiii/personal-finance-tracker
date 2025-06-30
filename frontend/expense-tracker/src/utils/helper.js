@@ -22,33 +22,33 @@ export const addThousandSeparator = (num) => {
   return num.toLocaleString('en-IN');  // or 'en-US' if you want
 }
 
-export const prepareExpenseBarChartdata=(data=[])=>{
-         const chartData=data.map((item)=>({
-          category:item?.category,
-          amount:item?.amount
-         }))
+export const prepareExpenseBarChartdata = (data = []) => {
+  const chartData = data.map((item) => ({
+    category: item?.category,
+    amount: item?.amount
+  }))
 
-         return chartData
+  return chartData
 }
 
 export const prepareIncomeBarChartData = (data = []) => {
-const currentYear = moment().format("YYYY");
+  const currentYear = moment().format("YYYY");
 
-const filteredData = data.filter(
-  (item) => moment(item.date).format("YYYY") === currentYear
-);
+  const filteredData = data.filter(
+    (item) => moment(item.date).format("YYYY") === currentYear
+  );
 
-const sorted = [...filteredData].sort(
-  (a, b) => new Date(a.date) - new Date(b.date)
-);
+  const sorted = [...filteredData].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
 
-const chartData = sorted.map((item) => ({
-  month: moment(item.date).format("Do MMM"), // e.g. "12th Jan"
-  amount: item.amount,
-  source: item.source,
-}));
+  const chartData = sorted.map((item) => ({
+    month: moment(item.date).format("Do MMM"), // e.g. "12th Jan"
+    amount: item.amount,
+    source: item.source,
+  }));
 
-return chartData;
+  return chartData;
 
 };
 
@@ -61,3 +61,30 @@ export const generateColors = (count) => {
   }
   return colors
 }
+
+export const prepareExpenseLineChartdata = (data = []) => {
+  const currentYear = moment().format("YYYY");
+
+  const filteredData = data.filter(
+    (item) => moment(item.date).format("YYYY") === currentYear
+  );
+
+  // group by month
+  const grouped = {};
+
+  filteredData.forEach((item) => {
+    const month = moment(item.date).format("Do MMM");
+    if (!grouped[month]) {
+      grouped[month] = 0;
+    }
+    grouped[month] += item.amount;
+  });
+
+  // convert back to array
+  const chartData = Object.entries(grouped).map(([month, amount]) => ({
+    month,
+    amount,
+  }));
+
+  return chartData;
+};

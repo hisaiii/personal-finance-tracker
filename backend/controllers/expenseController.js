@@ -51,9 +51,9 @@ export const downloadExpenseExcel = async (req, res) => {
     const expenses = await Expense.find({ userId }).sort({ date: -1 });
 
     const data = expenses.map(item => ({
-      Source: item.source,
+      Category: item.category,
       Amount: item.amount,
-      Date: item.date,
+      Date: item.date.toISOString().split("T")[0], // yyyy-mm-dd
     }));
 
     const wb = xlsx.utils.book_new();

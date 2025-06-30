@@ -29,7 +29,7 @@ const Income = () => {
       const response = await axiosInstance.get(
         `${API_PATHS.INCOME.GET_ALL_INCOME}`
       )
-
+  //.data is inbuilt
       if (response.data) {
         setIncomeData(response.data)
 
@@ -91,8 +91,21 @@ const Income = () => {
       console.error("Error deleting income",error.response?.data?.message|| error.message)
     }
   }
-  const handleDownloadIncomeDetails= aysnc=>{
-
+  const handleDownloadIncomeDetails = async () => {
+try{
+  const response=await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME,{responseType:"blob",})
+  const url=window.URL.createObjectURL(new Blob([response.data]))
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute("download", "income_details.xlsx");
+  document.body.appendChild(link);
+  link.click();
+  link.parentNode.removeChild(link);
+  window.URL.revokeObjectURL(url);
+} catch (error) {
+  console.error("Error downloading income details:", error);
+  toast.error("Failed to download income details. Please try again.");
+}
   }
   
   return (
@@ -121,6 +134,7 @@ const Income = () => {
         >
           <AddIncomeForm onAddIncome={handleAddIncome}/>
         </Modal>
+
         <Modal 
         isOpen={openDeleteAlert.show}
         onClose={()=>setOpenDeleteAlert({show:false,data:null})}
@@ -130,6 +144,7 @@ const Income = () => {
           onDelete={()=>deleteIncome(openDeleteAlert.data)}
           />
            </Modal> 
+
       </div>
     </DashboardLayout>
   )
