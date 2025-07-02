@@ -1,10 +1,13 @@
-import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { useSplitwise } from "../../context/SplitwiseContext";
 
 const Logout = () => {
-  useEffect(() => {
-    localStorage.removeItem("token");
-  }, []);
+  const { clearSplitwiseData } = useSplitwise();
+useEffect(() => {
+  console.log("LOGOUT: clearing token + splitwiseData");
+  localStorage.removeItem("token");
+  clearSplitwiseData();
+}, []);
+
 
   return <Navigate to="/login" />;
 };

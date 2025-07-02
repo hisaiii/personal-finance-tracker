@@ -5,42 +5,44 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import SplitwiseDetails from "./pages/Dashboard/SplitwiseDetails";
 
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Dashboard/Home";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
-import { UserContext, UserProvider } from "./context/UserContext";
-import { Toaster } from 'react-hot-toast'
+import { UserProvider } from "./context/UserContext";
+import { SplitwiseProvider } from "./context/SplitwiseContext"; // import kara
+import { Toaster } from "react-hot-toast";
 import Logout from "./pages/Auth/Logout";
 
 const App = () => {
   return (
     <UserProvider>
-      <div>
+      <SplitwiseProvider>
         <Router>
           <Routes>
             <Route path="/" element={<Root />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
-
             <Route path="/signup" exact element={<SignUp />} />
             <Route path="/dashboard" exact element={<Home />} />
             <Route path="/income" exact element={<Income />} />
             <Route path="/expense" element={<Expense />} />
+            <Route path="/splitwise-details" element={<SplitwiseDetails />} />
+
           </Routes>
         </Router>
-      </div>
-      <Toaster
-        toastOptions={{
-          className: "",
-          style: {
-            fontSize: "13px",
-          },
-        }}
-      />
-
+        <Toaster
+          toastOptions={{
+            className: "",
+            style: {
+              fontSize: "13px",
+            },
+          }}
+        />
+      </SplitwiseProvider>
     </UserProvider>
   );
 };
@@ -48,13 +50,6 @@ const App = () => {
 export default App;
 
 const Root = () => {
-  // Check if token exists in localStorage
   const isAuthenticated = !!localStorage.getItem("token");
-
-  // Redirect based on authentication
-  return isAuthenticated ? (
-    <Navigate to="/dashboard" />
-  ) : (
-    <Navigate to="/login" />
-  );
+  return isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
 };

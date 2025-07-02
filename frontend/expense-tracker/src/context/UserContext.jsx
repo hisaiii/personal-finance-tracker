@@ -6,6 +6,7 @@ export const UserContext = createContext();
 // 2. Create the provider component
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [splitwiseData, setSplitwiseData] = useState(null);
 
   // Function to update user data (e.g., after login)
   const updateUser = (userData) => {
@@ -18,7 +19,9 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, updateUser, clearUser }}>
+    <UserContext.Provider value={{
+      user, updateUser, clearUser, 
+    }}>
       {children}
     </UserContext.Provider>
   );

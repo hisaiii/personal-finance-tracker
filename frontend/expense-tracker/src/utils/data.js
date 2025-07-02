@@ -1,4 +1,6 @@
 import { LuLayoutDashboard, LuWalletMinimal, LuHandCoins, LuLogOut } from "react-icons/lu";
+import { VscDebugDisconnect } from "react-icons/vsc";   
+import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 
 export const SIDE_MENU_DATA = [
   {
@@ -20,9 +22,17 @@ export const SIDE_MENU_DATA = [
     path: "/expense",
   },
   {
+    id:"04",
+    label:"Splitwise",
+    icon:RiMoneyRupeeCircleFill
+,
+    path:"/splitwise-details"
+  },
+  {
     id: "06",
     label: "Logout",
     icon: LuLogOut,
     path: "/logout",
   },
+
 ];
