@@ -112,7 +112,7 @@ const Home = () => {
       const net = splitwiseData.balances.netBalance;
       const owe = splitwiseData.balances.totalOwed;
       const lent = splitwiseData.balances.totalToCollect;
-
+      const currency=splitwiseData.balances.currency
       return (
 <div className="p-6 rounded-2xl shadow  bg-white">
   <div className="flex justify-between items-center mb-4">
@@ -131,7 +131,7 @@ const Home = () => {
     <InfoCard
       icon={<AiOutlineRise />}
       label="You Lent"
-      value={`${lent} `}
+      value={`${lent} ${currency}`}
       color="bg-green-500 text-green-800"
       className="w-40"
     />
@@ -143,7 +143,7 @@ const Home = () => {
     <InfoCard
       icon={<AiOutlineFall />}
       label="You Owe"
-      value={`${owe} `}
+      value={`${owe} ${currency} `}
       color="bg-red-500 text-red-800"
       className="w-40"
     />
@@ -155,7 +155,7 @@ const Home = () => {
     <InfoCard
       icon={<FcMoneyTransfer />}
       label={ `Net ,${ splitwiseData.summary.status}`}
-      value={`${net} `}
+      value={`${net} ${currency}`}
       color={net < 0 ? "bg-red-500 text-red-900" : "bg-green-500 text-green-900"}
       className="w-40"
     />

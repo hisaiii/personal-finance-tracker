@@ -30,7 +30,15 @@ const IncomeOverview = ({ transactions, onAddIncome }) => {
 
             </div>
             <div className='mt-10'>
-                <CustomBarChart data={chartData} />
+                {
+                    chartData && chartData.length > 0 ? (
+                        <CustomBarChart data={chartData} />
+                    ) : (
+                        <p className="text-center text-sm text-gray-500 mt-4">
+                            No income data available.
+                        </p>
+                    )
+                }
             </div>
         </div>
     )

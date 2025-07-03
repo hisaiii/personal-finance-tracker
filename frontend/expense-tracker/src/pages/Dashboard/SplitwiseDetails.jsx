@@ -49,7 +49,7 @@ const SplitwiseDetails = () => {
         <div className="p-6 text-center">
           <p className="text-gray-600">No splitwise details found.</p>
           <p>Please connect to Splitwise if you haven't.</p>
-          <p className="text-lg">Or please refresh the page to get the latest data</p>
+          
         </div>
       </DashboardLayout>
     );
