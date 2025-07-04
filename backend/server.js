@@ -21,7 +21,7 @@ const _dirname = path.resolve()
 
 // 👉 Middleware to handle CORS
 app.use(cors({
-  origin: "https://personal-finance-tracker-8tdm.onrender.com/",
+  origin: "https://personal-finance-tracker-8tdm.onrender.com",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true // Important for sessions
@@ -117,6 +117,6 @@ app.get(/^(?!\/api).*/, (req, res) => {
 })
 
 // 👉 Start the server
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
