@@ -1,26 +1,27 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
 import { fileURLToPath } from 'url'
 import incomeRoutes from './routes/incomeRoutes.js'
-import exopenseRoutes from './routes/expenseRoutes.js'
+import expenseRoutes from './routes/expenseRoutes.js' // Fixed typo: exopenseRoutes -> expenseRoutes
 import dashboardRoutes from './routes/dashboardRoutes.js'
 import splitwiseRoutes from './routes/splitwiseRoutes.js';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
+import path from 'path';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
+const _dirname = path.resolve()
 
 // 👉 Middleware to handle CORS
 app.use(cors({
-  origin: process.env.CLIENT_URL||"http://localhost:5173",
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true // Important for sessions
@@ -68,7 +69,7 @@ passport.use(
           refreshToken: refreshToken,
           profile: profile
         };
-        
+
         return done(null, user);
       } catch (error) {
         return done(error, null);
@@ -85,10 +86,10 @@ passport.deserializeUser(function (obj, done) {
   done(null, obj);
 });
 
-// Routes
+// API Routes - These must come FIRST
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/income", incomeRoutes)
-app.use("/api/v1/expense", exopenseRoutes)
+app.use("/api/v1/expense", expenseRoutes) // Fixed variable name
 app.use("/api/v1/dashboard", dashboardRoutes)
 app.use('/api/v1/splitwise', splitwiseRoutes);
 
@@ -99,11 +100,21 @@ const __dirname = path.dirname(__filename)
 // Serve uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
-// Error handling middleware
+// Serve static files from frontend build
+app.use(express.static(path.join(_dirname, "frontend/dist")))
+
+// Error handling middleware - MUST come before catch-all route
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
+
+// Catch-all route - MUST be the very last route
+// Only serve index.html for non-API routes
+app.get(/^(?!\/api).*/, (req, res) => {
+  // This regex matches all routes that don't start with '/api'
+  res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"))
+})
 
 // 👉 Start the server
 app.listen(PORT, () => {

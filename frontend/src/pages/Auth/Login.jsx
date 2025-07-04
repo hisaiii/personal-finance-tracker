@@ -31,7 +31,6 @@ const Login = () => {
     }
     setError("")
 
-    console.log(email)
     //api call
 
     try {

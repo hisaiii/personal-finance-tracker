@@ -9,7 +9,6 @@ return res.status(401).json({message:"Not authorised,no token"})
     
         try{
             const decoded= jwt.verify(token,process.env.JWT_SECRET)
-            console.log("Token received:", token)
 
             //storing this in the name of user and passing it samne , i can name it anything like req.samosa
             req.user=await User.findById(decoded.id).select('-password')  //exclude password

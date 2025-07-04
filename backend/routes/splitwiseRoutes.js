@@ -4,26 +4,23 @@ import axios from 'axios';
 import { protect } from '../middleware/authMiddleware.js'; // Your JWT auth middleware
 
 const router = express.Router();
-
 router.get('/connect', passport.authenticate('oauth2'));
 
 router.get(
   '/callback',
   passport.authenticate('oauth2', { failureRedirect: '/' }),
   function (req, res) {
-    console.log("👉 req.user after callback: ", req.user);
     
     // Store the access token in session
     req.session.splitwiseAccessToken = req.user.accessToken;
     
     // Redirect back to dashboard instead of sending response
-    res.redirect(process.env.CLIENT_URL + "/dashboard");
+    res.redirect(`http://localhost:8000` + "/dashboard");
   }
 );
 
 // Protect the me route with your existing auth
 router.get('/me', protect, async (req, res) => {
-  console.log("✅ req.user on /me route: ", req.user);
 
   const token = req.session.splitwiseAccessToken;
   
