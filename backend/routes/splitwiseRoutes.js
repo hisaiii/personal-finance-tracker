@@ -15,7 +15,7 @@ router.get(
     req.session.splitwiseAccessToken = req.user.accessToken;
     
     // Redirect back to dashboard instead of sending response
-    res.redirect(`http://localhost:8000` + "/dashboard");
+    res.redirect(`https://personal-finance-tracker-8tdm.onrender.com` + "/dashboard");
   }
 );
 
