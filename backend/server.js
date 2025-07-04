@@ -21,7 +21,7 @@ const _dirname = path.resolve()
 
 // 👉 Middleware to handle CORS
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: "https://personal-finance-tracker-8tdm.onrender.com/",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true // Important for sessions
