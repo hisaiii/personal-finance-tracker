@@ -125,7 +125,7 @@ const Home = () => {
     </button>
   </div>
 
-  <div className="flex flex-wrap justify-center items-center gap-3 mt-4">
+  <div className="flex flex-col md:flex-row flex-wrap justify-center items-center gap-3 mt-4">
 
     {/* You Lent */}
     <InfoCard
