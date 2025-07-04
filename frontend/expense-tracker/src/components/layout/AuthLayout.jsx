@@ -20,7 +20,7 @@ const AuthLayout = ({ children }) => {
     return (
         <div className='flex'>
             <div className='w-screen md:w-[60vw] h-screen px-12 pb-12 pt-10'>
-                <h2 className='text-lg font-medium text-black'>Expense Tracker</h2>
+<h2 className="text-3xl font-semibold text-black">𝙵𝚒𝚗𝚂𝚒𝚐𝚑𝚝</h2>
 
                 {children}
             </div>

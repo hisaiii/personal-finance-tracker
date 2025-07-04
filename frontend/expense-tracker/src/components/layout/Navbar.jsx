@@ -66,11 +66,11 @@ const { splitwiseData, setSplitwiseData, splitwiseLoading, setSplitwiseLoading }
         >
           {openSideMenu ? <HiOutlineX className='text-2xl' /> : <HiOutlineMenu className='text-2xl' />}
         </button>
-        <h2 className='text-lg font-medium text-black'>Expense Tracker</h2>
+<h2 className="text-3xl font-semibold text-black">𝙵𝚒𝚗𝚂𝚒𝚐𝚑𝚝</h2>
       </div>
 
       {/* right: connect / disconnect button */}
-      <div className='hidden md:block '>
+      <div className=''>
         {!splitwiseData ? (
           <button
             onClick={handleSplitwiseConnect}

@@ -1,11 +1,13 @@
 import { API_PATHS } from "./apiPaths";
 import axiosInstance from "./axiosInstance";
 
-const uploadImage = async (imageFile) => {
+const uploadImage = async (imageFile,folderName = "general") => {
   const formData = new FormData();
 
   // Append image file to form data
   formData.append("image", imageFile);
+  formData.append("folder", folderName);
+
 // FormData  used for uploading files and sending multipart/form-data
   try {
     const response = await axiosInstance.post(

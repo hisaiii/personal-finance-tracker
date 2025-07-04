@@ -9,7 +9,6 @@ const DashboardLayout = ({ children, activeMenu}) => {
   return (
     <div className="">
 
-   {/* i removed passign active menu to navbar as it doesnt matter so far */}
 
       <Navbar
        />

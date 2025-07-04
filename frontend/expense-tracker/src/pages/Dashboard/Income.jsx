@@ -20,6 +20,11 @@ const Income = () => {
     show: false,
     data: null,
   })
+  const [openIncomeProof, setOpenIncomeProof] = useState({
+    show: false,
+    imageUrl: null,
+  });
+
 
   const fetchIncomeDetails = async () => {
     if (loading) return
@@ -29,7 +34,7 @@ const Income = () => {
       const response = await axiosInstance.get(
         `${API_PATHS.INCOME.GET_ALL_INCOME}`
       )
-  //.data is inbuilt
+      //.data is inbuilt
       if (response.data) {
         setIncomeData(response.data)
 
@@ -49,65 +54,65 @@ const Income = () => {
   }, [])
 
   //handle add income
-  const handleAddIncome=async(income)=>{
-    const {source,amount,date,icon}=income   //destructuring income object
+  const handleAddIncome = async (income) => {
+    const { source, amount, date, icon, imageUrl } = income   //destructuring income object
 
     //validation
     //trim() removes white spaces
-    if(!source.trim()){
+    if (!source.trim()) {
       toast.error("Source is required")
       return
     }
 
-    if(!amount|| isNaN(amount)||Number(amount)<=0){
+    if (!amount || isNaN(amount) || Number(amount) <= 0) {
       toast.error("Amount must be a valid integer greater than 0.")
     }
 
-    if(!date){
+    if (!date) {
       toast.error("Date is required.")
     }
-    try{
-     
-      const response= await axiosInstance.post(
-          `${API_PATHS.INCOME.ADD_INCOME}`,
-          {source,amount,date,icon}
+    try {
+
+      const response = await axiosInstance.post(
+        `${API_PATHS.INCOME.ADD_INCOME}`,
+        { source, amount, date, icon, imageUrl }
       )
       setOpenAddIncomeModal(false)
       toast.success("Income added successfully")
       fetchIncomeDetails()
-    }catch(err){
-     console.error("something went wrong", err);
+    } catch (err) {
+      console.error("something went wrong", err);
 
     }
-  } 
+  }
 
-  const deleteIncome=async(id)=>{
-    try{
+  const deleteIncome = async (id) => {
+    try {
       await axiosInstance.delete(API_PATHS.INCOME.DELETE_INCOME(id))
-      setOpenDeleteAlert({show:false,data:null})
+      setOpenDeleteAlert({ show: false, data: null })
       toast.success("Income details deleted successfully")
       fetchIncomeDetails()
-    }catch(error){
-      console.error("Error deleting income",error.response?.data?.message|| error.message)
+    } catch (error) {
+      console.error("Error deleting income", error.response?.data?.message || error.message)
     }
   }
   const handleDownloadIncomeDetails = async () => {
-try{
-  const response=await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME,{responseType:"blob",})
-  const url=window.URL.createObjectURL(new Blob([response.data]))
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute("download", "income_details.xlsx");
-  document.body.appendChild(link);
-  link.click();
-  link.parentNode.removeChild(link);
-  window.URL.revokeObjectURL(url);
-} catch (error) {
-  console.error("Error downloading income details:", error);
-  toast.error("Failed to download income details. Please try again.");
-}
+    try {
+      const response = await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME, { responseType: "blob", })
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute("download", "income_details.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading income details:", error);
+      toast.error("Failed to download income details. Please try again.");
+    }
   }
-  
+
   return (
     <DashboardLayout activeMenu="Income">
       <div className='my-5 mx-auto'>
@@ -119,31 +124,51 @@ try{
             />
           </div>
           <IncomeList
-          transactions={incomeData}
-          onDelete={(id)=>{
-            setOpenDeleteAlert({show:true,data:id})
-
-          }}
-          onDownload={handleDownloadIncomeDetails}
+            transactions={incomeData}
+            onDelete={(id) => {
+              setOpenDeleteAlert({ show: true, data: id })
+            }}
+            onDownload={handleDownloadIncomeDetails}
+            onPreview={(imageUrl) =>
+              setOpenIncomeProof({
+                show: true,
+                imageUrl,
+              })
+            }
           />
+
         </div>
         <Modal
           isOpen={OpenAddIncomeModal}
           onClose={() => setOpenAddIncomeModal(false)}
           title="Add Income"
         >
-          <AddIncomeForm onAddIncome={handleAddIncome}/>
+          <AddIncomeForm onAddIncome={handleAddIncome} />
         </Modal>
 
-        <Modal 
-        isOpen={openDeleteAlert.show}
-        onClose={()=>setOpenDeleteAlert({show:false,data:null})}
-        title="Delete Income"
+        <Modal
+          isOpen={openDeleteAlert.show}
+          onClose={() => setOpenDeleteAlert({ show: false, data: null })}
+          title="Delete Income"
         >
           <DeleteAlert content="Are you sure you want to delete this income?"
-          onDelete={()=>deleteIncome(openDeleteAlert.data)}
+            onDelete={() => deleteIncome(openDeleteAlert.data)}
           />
-           </Modal> 
+        </Modal>
+        <Modal
+          isOpen={openIncomeProof.show}
+          onClose={() => setOpenIncomeProof({ show: false, imageUrl: null })}
+          title="Income Proof"
+        >
+          {openIncomeProof.imageUrl && (
+            <img
+              src={openIncomeProof.imageUrl}
+              alt="Income Proof"
+              className="w-full max-h-[400px] object-contain rounded"
+            />
+          )}
+        </Modal>
+
 
       </div>
     </DashboardLayout>

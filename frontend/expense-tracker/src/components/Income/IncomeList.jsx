@@ -1,9 +1,9 @@
 import React from 'react'
-import { LuDownload } from 'react-icons/lu' 
+import { LuDownload } from 'react-icons/lu'
 import TransactionInfoCard from "../Cards/TransactionInfoCard"
 import moment from 'moment'
 
-const IncomeList = ({ transactions, onDelete, onDownload }) => {
+const IncomeList = ({ transactions, onDelete, onDownload, onPreview }) => {
     return (
         <div className='card'>
             <div className='flex items-center justify-between'>
@@ -23,7 +23,11 @@ const IncomeList = ({ transactions, onDelete, onDownload }) => {
                             amount={income.amount}
                             type="income"
                             onDelete={() => onDelete(income._id)}
+                            imageUrl={income.imageUrl}
+                            onPreview={() => onPreview(income.imageUrl)}
+
                         />
+
                     ))
                 ) : (
                     <p className="text-center text-sm text-gray-500 mt-4 col-span-2">

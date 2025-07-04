@@ -1,9 +1,9 @@
 import React from 'react'
-import { LuDownload } from 'react-icons/lu' 
+import { LuDownload } from 'react-icons/lu'
 import TransactionInfoCard from "../Cards/TransactionInfoCard"
 import moment from 'moment'
 
-const ExpenseList = ({ transactions, onDelete, onDownload }) => {
+const ExpenseList = ({ transactions, onDelete, onDownload, onPreview }) => {
     return (
         <div className='card'>
             <div className='flex items-center justify-between'>
@@ -23,6 +23,8 @@ const ExpenseList = ({ transactions, onDelete, onDownload }) => {
                             amount={expense.amount}
                             type="expense"
                             onDelete={() => onDelete(expense._id)}
+                            imageUrl={expense.imageUrl}
+                            onPreview={() => onPreview(expense.imageUrl)}  // 👈 added preview support
                         />
                     ))
                 ) : (
