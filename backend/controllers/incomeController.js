@@ -6,15 +6,16 @@ import * as xlsx from 'xlsx';
 //add income source
 export const addIncome = async (req, res) => {
   const userId = req.user.id
+
   try {
-    const { icon, source, amount, date } = req.body
+    const { icon, source, amount, date ,imageUrl} = req.body
 
     if (!source || !amount || !date) {
       return res.status(400).json({ message: "all fields are required" })
     }
 
     const newIncome = await Income.create({
-      userId, icon, source, amount, date: new Date(date)
+      userId, icon, source, amount, date: new Date(date),imageUrl
     })
     res.status(200).json(newIncome)
   } catch (err) {

@@ -8,23 +8,25 @@ const incomeSchema = new mongoose.Schema({
         required: true
     },
 
-    icon:{
-        type:String
+    icon: {
+        type: String
     },
-    source:{
-        type:String,
-        required:true
+    source: {
+        type: String,
+        required: true
     },
-    amount:{
-        type:Number,
-        required:true        
+    amount: {
+        type: Number,
+        required: true
     },
-    date:{
-        type:Date,
-        default:Date.now
+    date: {
+        type: Date,
+        default: Date.now
     },
+    imageUrl: { type: String, default: "" }
+
 },
-    {timestamps: true}
+    { timestamps: true }
 )
 
 const Income = mongoose.model('Income', incomeSchema)

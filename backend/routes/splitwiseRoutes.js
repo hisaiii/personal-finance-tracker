@@ -5,8 +5,6 @@ import { protect } from '../middleware/authMiddleware.js'; // Your JWT auth midd
 
 const router = express.Router();
 
-// Protect the connect route with your existing auth
-// remove protect:
 router.get('/connect', passport.authenticate('oauth2'));
 
 router.get(

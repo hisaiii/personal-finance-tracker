@@ -20,7 +20,9 @@ const expenseSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+      imageUrl: { type: String, default: "" }
+
 }, { timestamps: true });
 
 const Expense = mongoose.model("Expense", expenseSchema);

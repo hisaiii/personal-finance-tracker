@@ -3,18 +3,18 @@ import Expense from "../models/Expense.js"
 import mongoose from "mongoose"
 import * as xlsx from 'xlsx';
 
-// ➕ Add Expense
+//  Add Expense
 export const addExpense = async (req, res) => {
   const userId = req.user.id;
   try {
-    const { icon, category, amount, date } = req.body;
+    const { icon, category, amount, date,imageUrl } = req.body;
 
     if (!category || !amount || !date) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const newExpense = await Expense.create({
-      userId, icon, category, amount, date: new Date(date)
+      userId, icon, category, amount, date: new Date(date),imageUrl
     });
 
     res.status(200).json(newExpense);
@@ -34,7 +34,7 @@ export const getAllExpense = async (req, res) => {
   }
 };
 
-// ❌ Delete Expense
+//  Delete Expense
 export const deleteExpense = async (req, res) => {
   try {
     await Expense.findByIdAndDelete(req.params.id);
@@ -44,7 +44,7 @@ export const deleteExpense = async (req, res) => {
   }
 };
 
-// ⬇️ Download Expenses as Excel
+// Download Expenses as Excel
 export const downloadExpenseExcel = async (req, res) => {
   const userId = req.user.id;
   try {
