@@ -1,4 +1,4 @@
-export const BASE_URL = "https://personal-finance-tracker-8tdm.onrender.com/";
+export const BASE_URL = "https://personal-finance-tracker-8tdm.onrender.com";
 
 export const API_PATHS = {
   AUTH: {
