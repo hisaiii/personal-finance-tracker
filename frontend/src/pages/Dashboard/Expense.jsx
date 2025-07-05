@@ -97,9 +97,15 @@ const Expense = () => {
     }
   }
 
-  return (
-    <DashboardLayout activeMenu="Expense">
-      <div className="my-5 mx-auto">
+return (
+  <DashboardLayout activeMenu="Expense">
+    <div className="my-5 mx-auto">
+      {loading ? (
+        <div className="text-center py-8">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="mt-2 text-gray-600">Loading expenses...</p>
+        </div>
+      ) : (
         <div className="grid grid-cols-1 gap-6">
           <div>
             <ExpenseOverview
@@ -114,42 +120,47 @@ const Expense = () => {
             onPreview={(imageUrl) => setOpenExpenseProof({ show: true, imageUrl })}
           />
         </div>
+      )}
 
-        <Modal
-          isOpen={OpenAddExpenseModal}
-          onClose={() => setOpenAddExpenseModal(false)}
-          title="Add Expense"
-        >
-          <AddExpenseForm onAddExpense={handleAddExpense} />
-        </Modal>
+      {/* Add Expense Modal */}
+      <Modal
+        isOpen={OpenAddExpenseModal}
+        onClose={() => setOpenAddExpenseModal(false)}
+        title="Add Expense"
+      >
+        <AddExpenseForm onAddExpense={handleAddExpense} />
+      </Modal>
 
-        <Modal
-          isOpen={openDeleteAlert.show}
-          onClose={() => setOpenDeleteAlert({ show: false, data: null })}
-          title="Delete Expense"
-        >
-          <DeleteAlert
-            content="Are you sure you want to delete this expense?"
-            onDelete={() => deleteExpense(openDeleteAlert.data)}
+      {/* Delete Alert Modal */}
+      <Modal
+        isOpen={openDeleteAlert.show}
+        onClose={() => setOpenDeleteAlert({ show: false, data: null })}
+        title="Delete Expense"
+      >
+        <DeleteAlert
+          content="Are you sure you want to delete this expense?"
+          onDelete={() => deleteExpense(openDeleteAlert.data)}
+        />
+      </Modal>
+
+      {/* Expense Proof Modal */}
+      <Modal
+        isOpen={openExpenseProof.show}
+        onClose={() => setOpenExpenseProof({ show: false, imageUrl: null })}
+        title="Expense Proof"
+      >
+        {openExpenseProof.imageUrl && (
+          <img
+            src={openExpenseProof.imageUrl}
+            alt="Expense Proof"
+            className="w-full max-h-[400px] object-contain rounded"
           />
-        </Modal>
+        )}
+      </Modal>
+    </div>
+  </DashboardLayout>
+)
 
-        <Modal
-          isOpen={openExpenseProof.show}
-          onClose={() => setOpenExpenseProof({ show: false, imageUrl: null })}
-          title="Expense Proof"
-        >
-          {openExpenseProof.imageUrl && (
-            <img
-              src={openExpenseProof.imageUrl}
-              alt="Expense Proof"
-              className="w-full max-h-[400px] object-contain rounded"
-            />
-          )}
-        </Modal>
-      </div>
-    </DashboardLayout>
-  )
 }
 
 export default Expense

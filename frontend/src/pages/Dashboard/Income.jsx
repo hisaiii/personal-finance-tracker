@@ -113,10 +113,16 @@ const Income = () => {
     }
   }
 
-  return (
-    <DashboardLayout activeMenu="Income">
-      <div className='my-5 mx-auto'>
-        <div className='grid grid-cols-1 gap-6'>
+return (
+  <DashboardLayout activeMenu="Income">
+    <div className="my-5 mx-auto">
+      {loading ? (
+        <div className="text-center py-8">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="mt-2 text-gray-600">Loading incomes...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6">
           <div>
             <IncomeOverview
               transactions={incomeData}
@@ -125,54 +131,51 @@ const Income = () => {
           </div>
           <IncomeList
             transactions={incomeData}
-            onDelete={(id) => {
-              setOpenDeleteAlert({ show: true, data: id })
-            }}
+            onDelete={(id) => setOpenDeleteAlert({ show: true, data: id })}
             onDownload={handleDownloadIncomeDetails}
             onPreview={(imageUrl) =>
-              setOpenIncomeProof({
-                show: true,
-                imageUrl,
-              })
+              setOpenIncomeProof({ show: true, imageUrl })
             }
           />
-
         </div>
-        <Modal
-          isOpen={OpenAddIncomeModal}
-          onClose={() => setOpenAddIncomeModal(false)}
-          title="Add Income"
-        >
-          <AddIncomeForm onAddIncome={handleAddIncome} />
-        </Modal>
+      )}
 
-        <Modal
-          isOpen={openDeleteAlert.show}
-          onClose={() => setOpenDeleteAlert({ show: false, data: null })}
-          title="Delete Income"
-        >
-          <DeleteAlert content="Are you sure you want to delete this income?"
-            onDelete={() => deleteIncome(openDeleteAlert.data)}
+      <Modal
+        isOpen={OpenAddIncomeModal}
+        onClose={() => setOpenAddIncomeModal(false)}
+        title="Add Income"
+      >
+        <AddIncomeForm onAddIncome={handleAddIncome} />
+      </Modal>
+
+      <Modal
+        isOpen={openDeleteAlert.show}
+        onClose={() => setOpenDeleteAlert({ show: false, data: null })}
+        title="Delete Income"
+      >
+        <DeleteAlert
+          content="Are you sure you want to delete this income?"
+          onDelete={() => deleteIncome(openDeleteAlert.data)}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={openIncomeProof.show}
+        onClose={() => setOpenIncomeProof({ show: false, imageUrl: null })}
+        title="Income Proof"
+      >
+        {openIncomeProof.imageUrl && (
+          <img
+            src={openIncomeProof.imageUrl}
+            alt="Income Proof"
+            className="w-full max-h-[400px] object-contain rounded"
           />
-        </Modal>
-        <Modal
-          isOpen={openIncomeProof.show}
-          onClose={() => setOpenIncomeProof({ show: false, imageUrl: null })}
-          title="Income Proof"
-        >
-          {openIncomeProof.imageUrl && (
-            <img
-              src={openIncomeProof.imageUrl}
-              alt="Income Proof"
-              className="w-full max-h-[400px] object-contain rounded"
-            />
-          )}
-        </Modal>
+        )}
+      </Modal>
+    </div>
+  </DashboardLayout>
+);
 
-
-      </div>
-    </DashboardLayout>
-  )
 }
 
 export default Income
