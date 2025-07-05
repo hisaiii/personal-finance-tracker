@@ -11,8 +11,7 @@ import { VscDebugDisconnect } from "react-icons/vsc";
 const Navbar = () => {
   const [openSideMenu, setOpenSideMenu] = useState(false);
   const [loading, setLoading] = useState(false);
-
-const { splitwiseData, setSplitwiseData, splitwiseLoading, setSplitwiseLoading } = useSplitwise();
+  const { splitwiseData, setSplitwiseData, splitwiseLoading, setSplitwiseLoading } = useSplitwise();
 
   // Check Splitwise status on mount
   const checkSplitwiseStatus = async () => {
@@ -56,39 +55,50 @@ const { splitwiseData, setSplitwiseData, splitwiseLoading, setSplitwiseLoading }
   }, []);
 
   return (
-    <div className='flex justify-between items-center gap-5 bg-white border-b border-gray-200/50 backdrop-blur-[2px] px-7 py-4 sticky top-0 z-30'>
-
+    <div className='flex justify-between items-center gap-2 sm:gap-5 bg-white border-b border-gray-200/50 backdrop-blur-[2px] px-3 sm:px-7 py-4 sticky top-0 z-30'>
+      
       {/* left: burger + title */}
-      <div className='flex items-center gap-4'>
+      <div className='flex items-center gap-2 sm:gap-4 min-w-0 flex-1'>
         <button
-          className='block lg:hidden text-black'
+          className='block lg:hidden text-black flex-shrink-0'
           onClick={() => setOpenSideMenu(!openSideMenu)}
         >
           {openSideMenu ? <HiOutlineX className='text-2xl' /> : <HiOutlineMenu className='text-2xl' />}
         </button>
-<h2 className="text-3xl font-bold text-slate-800 tracking-tight drop-shadow-md">
-  Fin<span className="text-primary">Sight</span>
-</h2>
+        <h2 className="text-xl sm:text-3xl font-bold text-slate-800 tracking-tight drop-shadow-md truncate">
+          Fin<span className="text-primary">Sight</span>
+        </h2>
       </div>
 
       {/* right: connect / disconnect button */}
-      <div className=''>
+      <div className='flex-shrink-0'>
         {!splitwiseData ? (
           <button
             onClick={handleSplitwiseConnect}
-            className={`flex justify-center items-center gap-1.5 px-4 py-2 rounded-xl cursor-pointer font-semibold text-white ${loading ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'}`}
+            className={`flex justify-center items-center gap-1 sm:gap-1.5 px-2 sm:px-4 py-2 rounded-xl cursor-pointer font-semibold text-white text-sm sm:text-base ${loading ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'}`}
             disabled={loading}
-          ><PiPlugsConnectedFill className='text-xl'/>  
-            {loading ? "Connecting..." : "Connect Splitwise"}
+          >
+            <PiPlugsConnectedFill className='text-lg sm:text-xl flex-shrink-0'/>
+            <span className='hidden sm:inline'>
+              {loading ? "Connecting..." : "Connect Splitwise"}
+            </span>
+            <span className='sm:hidden'>
+              {loading ? "Connecting..." : "Splitwise"}
+            </span>
           </button>
         ) : (
           <button
             onClick={handleSplitwiseDisconnect}
-            className={`flex justify-center items-center gap-1.5 px-4 py-2 rounded-xl cursor-pointer font-semibold text-white ${loading ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700 '}`}
+            className={`flex justify-center items-center gap-1 sm:gap-1.5 px-2 sm:px-4 py-2 rounded-xl cursor-pointer font-semibold text-white text-sm sm:text-base ${loading ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'}`}
             disabled={loading}
-          ><VscDebugDisconnect className='text-xl' />
-
-            {loading ? "Disconnecting..." : "Disconnect Splitwise"}
+          >
+            <VscDebugDisconnect className='text-lg sm:text-xl flex-shrink-0' />
+            <span className='hidden sm:inline'>
+              {loading ? "Disconnecting..." : "Disconnect Splitwise"}
+            </span>
+            <span className='sm:hidden'>
+              {loading ? "Disconnecting..." : "Splitwise"}
+            </span>
           </button>
         )}
       </div>
