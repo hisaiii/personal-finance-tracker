@@ -41,9 +41,10 @@ const AuthLayout = ({ children }) => {
                         color="bg-primary"
                     />
                 </div>
-<div className="absolute top-60 left-10 w-64 md:w-[90%] md:h-[55%] rounded-3xl shadow-lg shadow-blue-400/15 bg-white p-2">
-                    <IncomeExpenseChart />
-                </div>            </div>
+<div className="absolute top-60 left-10 w-64 md:w-[90%] md:h-[55%] rounded-3xl shadow-lg shadow-blue-400/15 p-2 bg-violet-50 overflow-hidden">
+  <IncomeExpenseChart />
+</div>
+            </div>
         </div>
     );
 };
