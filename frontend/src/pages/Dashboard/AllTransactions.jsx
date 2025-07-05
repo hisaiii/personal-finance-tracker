@@ -86,7 +86,7 @@ const AllTransactions = () => {
         if (!allTransactions || allTransactions.length === 0) return [];
 
         let filtered = allTransactions.filter(transaction => {
-            const matchesSearch = transaction.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            const matchesSearch =  
                 transaction.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 transaction.source?.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -101,9 +101,8 @@ const AllTransactions = () => {
                 return new Date(b.date) - new Date(a.date);
             } else if (sortBy === 'amount') {
                 return b.amount - a.amount;
-            } else if (sortBy === 'title') {
-                return a.title?.localeCompare(b.title) || 0;
-            }
+            } 
+
             return 0;
         });
 
@@ -192,7 +191,6 @@ const AllTransactions = () => {
                         >
                             <option value="date">Sort by Date</option>
                             <option value="amount">Sort by Amount</option>
-                            <option value="title">Sort by Title</option>
                         </select>
                     </div>
                 </div>
