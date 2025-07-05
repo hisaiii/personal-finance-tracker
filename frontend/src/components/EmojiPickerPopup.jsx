@@ -1,6 +1,6 @@
 import React from 'react'
 import EmojiPicker from "emoji-picker-react"
-import { LuImage, LuX } from 'react-icons/lu'  
+import { LuImage, LuX } from 'react-icons/lu'
 import { useState } from 'react'
 const EmojiPickerPopup = ({ icon, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false)
@@ -30,7 +30,10 @@ const EmojiPickerPopup = ({ icon, onSelect }) => {
                     </button>
                     <EmojiPicker
                         open={isOpen}
-                        onEmojiClick={(emoji) => onSelect(emoji?.imageUrl || "")}
+                        onEmojiClick={(emoji) => {
+                            onSelect(emoji?.imageUrl || "");
+                            setIsOpen(false); // ✅ CLOSE after selecting emoji
+                        }}
                     />
                 </div>
             )}
