@@ -3,20 +3,21 @@ import DashboardLayout from '../../components/layout/DashboardLayout.jsx';
 import TransactionInfoCard from '../../components/Cards/TransactionInfoCard';
 import { useUserAuth } from '../../hooks/useUserAuth';
 import axiosInstance from '../../utils/axiosInstance';
-import { API_PATHS } from '../../utils/apiPaths'; 
+import { API_PATHS } from '../../utils/apiPaths';
 import moment from 'moment';
 import { addThousandSeparator } from '../../utils/helper';
-import { 
-    LuSearch, 
-    LuCalendar, 
+import {
+    LuSearch,
+    LuCalendar,
     LuLoader2,
     LuAlertCircle,
     LuRotateCcw // Changed from LuRefreshCw to LuRotateCcw
 } from 'react-icons/lu';
+import { FaSpinner } from 'react-icons/fa';
 
 const AllTransactions = () => {
     useUserAuth();
-    
+
     const [allTransactions, setAllTransactions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -38,12 +39,12 @@ const AllTransactions = () => {
                     ...(response.data.recentTransactions || []),
 
                 ];
-                
+
                 // Remove duplicates based on _id
                 // const uniqueTransactions = combinedTransactions.filter((transaction, index, self) =>
                 //     index === self.findIndex(t => t._id === transaction._id)
                 // );
-                
+
                 setAllTransactions(Transactions);
             }
         } catch (err) {
@@ -65,7 +66,7 @@ const AllTransactions = () => {
     //         try {
     //             // API call to delete transaction
     //             await axiosInstance.delete(`${API_PATHS.TRANSACTIONS.DELETE}/${transactionId}`);
-                
+
     //             // Update local state
     //             setAllTransactions(prevTransactions => 
     //                 prevTransactions.filter(t => t._id !== transactionId)
@@ -86,14 +87,14 @@ const AllTransactions = () => {
     // Filter and sort transactions
     const getFilteredTransactions = () => {
         if (!allTransactions || allTransactions.length === 0) return [];
-        
+
         let filtered = allTransactions.filter(transaction => {
             const matchesSearch = transaction.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                transaction.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                transaction.source?.toLowerCase().includes(searchTerm.toLowerCase());
-            
+                transaction.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.source?.toLowerCase().includes(searchTerm.toLowerCase());
+
             const matchesType = filterType === 'all' || transaction.type === filterType;
-            
+
             return matchesSearch && matchesType;
         });
 
@@ -120,7 +121,7 @@ const AllTransactions = () => {
             <DashboardLayout activeMenu="All Transactions">
                 <div className="flex items-center justify-center min-h-[400px]">
                     <div className="text-center">
-                        <LuLoader2 className="animate-spin mx-auto text-blue-500 mb-4" size={48} />
+                        <FaSpinner className="animate-spin mx-auto text-blue-500 mb-4" size={48} />
                         <p className="text-gray-600">Loading transactions...</p>
                     </div>
                 </div>
@@ -136,7 +137,7 @@ const AllTransactions = () => {
                     <div className="text-center">
                         <LuAlertCircle className="mx-auto text-red-500 mb-4" size={48} />
                         <p className="text-red-600 mb-4">{error}</p>
-                        <button 
+                        <button
                             onClick={fetchAllTransactions}
                             className="flex items-center gap-2 mx-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                         >
@@ -206,7 +207,7 @@ const AllTransactions = () => {
                             Transactions ({filteredTransactions.length})
                         </h2>
                     </div>
-                    
+
                     <div className="p-4">
                         {filteredTransactions.length > 0 ? (
                             <div className="space-y-2">
@@ -219,8 +220,8 @@ const AllTransactions = () => {
                                         amount={addThousandSeparator(transaction.amount)}
                                         type={transaction.type}
                                         imageUrl={transaction.imageUrl}
-                                        // onDelete={() => handleDeleteTransaction(transaction._id)}
-                                        // onPreview={() => handlePreviewTransaction(transaction)}
+                                    // onDelete={() => handleDeleteTransaction(transaction._id)}
+                                    // onPreview={() => handlePreviewTransaction(transaction)}
                                     />
                                 ))}
                             </div>
@@ -229,8 +230,8 @@ const AllTransactions = () => {
                                 <LuCalendar className="mx-auto text-gray-400 mb-4" size={48} />
                                 <p className="text-gray-500">No transactions found</p>
                                 <p className="text-sm text-gray-400 mt-1">
-                                    {searchTerm || filterType !== 'all' 
-                                        ? 'Try adjusting your search or filter criteria' 
+                                    {searchTerm || filterType !== 'all'
+                                        ? 'Try adjusting your search or filter criteria'
                                         : 'Start by adding your first transaction'
                                     }
                                 </p>
