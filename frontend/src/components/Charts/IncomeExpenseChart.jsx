@@ -1,17 +1,17 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const data = [
-  { month: "Jan", income: 1200, expense: 800 },
-  { month: "Feb", income: 1500, expense: 1000 },
-  { month: "Mar", income: 20000, expense: 1600 },
-  { month: "Apr", income: 3000, expense: 2500 },
+  { month: "Jan", income: 12000, expense: 8700 },
+  { month: "Feb", income: 15000, expense: 4000 },
+  { month: "Mar", income: 20000, expense: 8600 },
+  { month: "Apr", income: 30000, expense: 8500 },
   { month: "May", income: 9000, expense: 6000 },
-  { month: "Jun", income: 2200, expense: 180 },
-  { month: "Jul", income: 3201, expense: 2600 },
+  { month: "Jun", income: 22000, expense: 18000},
+  { month: "Jul", income: 32010, expense: 9600 },
 ];
 export default function IncomeExpenseChart() {
   return (
-    <div className="w-full h-[300px] p-2 rounded-xl">
+    <div className="w-full h-[300px] p-2 rounded-xl bg-white">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <XAxis dataKey="month" />
