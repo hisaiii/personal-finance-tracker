@@ -1,6 +1,8 @@
 import React from 'react';
 import { LuTrendingUpDown } from 'react-icons/lu';
 import card2 from "../../assets/images/card2.png";
+import IncomeExpenseChart from "../../components/Charts/IncomeExpenseChart.jsx";
+
 
 const StatsInfoCard = ({ icon, label, value, color }) => {
     return (
@@ -39,8 +41,9 @@ const AuthLayout = ({ children }) => {
                         color="bg-primary"
                     />
                 </div>
-                <img src={card2} className='w-64 md:w-[90%] md:h-[55%] absolute top-60 left-10 rounded-3xl shadow-lg shadow-blue-400/15' />
-            </div>
+<div className="absolute top-60 left-10 w-64 md:w-[90%] md:h-[55%] rounded-3xl shadow-lg shadow-blue-400/15 bg-white p-2">
+                    <IncomeExpenseChart />
+                </div>            </div>
         </div>
     );
 };
