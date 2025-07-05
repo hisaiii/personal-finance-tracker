@@ -23,7 +23,7 @@ const TransactionInfoCard = ({
 
     return (
         <div className="group relative mt-2 p-3 rounded-lg hover:bg-gray-100/60">
-            {/* Original layout */}
+            {/* Original Desktop Layout */}
             <div className="flex items-center gap-4">
                 <div className="w-12 h-12 flex items-center justify-center text-xl text-gray-800 bg-gray-100 rounded-full">
                     {icon ? (
@@ -38,6 +38,27 @@ const TransactionInfoCard = ({
                         <p className="text-sm text-gray-700 font-medium">{title}</p>
                         <p className="text-xs text-gray-400 mt-1">{date}</p>
                     </div>
+
+                    {/* Desktop: Original buttons in the middle */}
+                    <div className="hidden sm:flex items-center gap-2">
+                        {imageUrl && (
+                            <button
+                                className="text-gray-400 hover:text-blue-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity cursor-pointer"
+                                onClick={onPreview}
+                            >
+                                <LuEye size={18} />
+                            </button>
+                        )}
+
+                        {!hideDeleteBtn && (
+                            <button
+                                className="text-gray-400 hover:text-red-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity cursor-pointer"
+                                onClick={onDelete}
+                            >
+                                <LuTrash2 size={18} />
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div
@@ -50,8 +71,8 @@ const TransactionInfoCard = ({
                 </div>
             </div>
 
-            {/* Action buttons at bottom */}
-            <div className="flex items-center justify-end gap-3 mt-3 pt-2 border-t border-gray-100">
+            {/* Mobile: Action buttons at bottom */}
+            <div className="flex sm:hidden items-center justify-end gap-3 mt-3 pt-2 border-t border-gray-100">
                 {imageUrl && (
                     <button
                         className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-blue-500 transition-colors"
