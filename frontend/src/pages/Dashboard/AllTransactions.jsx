@@ -8,12 +8,10 @@ import moment from 'moment';
 import { addThousandSeparator } from '../../utils/helper';
 import {
     LuSearch,
-    LuCalendar,
-    LuLoader2,
-    LuAlertCircle,
-    LuRotateCcw // Changed from LuRefreshCw to LuRotateCcw
+    LuCalendar
 } from 'react-icons/lu';
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner, FaExclamationCircle, FaSync } from 'react-icons/fa';
+
 
 const AllTransactions = () => {
     useUserAuth();
@@ -135,13 +133,13 @@ const AllTransactions = () => {
             <DashboardLayout activeMenu="All Transactions">
                 <div className="flex items-center justify-center min-h-[400px]">
                     <div className="text-center">
-                        <LuAlertCircle className="mx-auto text-red-500 mb-4" size={48} />
+                        <FaExclamationCircle className="mx-auto text-red-500 mb-4" size={48} />
                         <p className="text-red-600 mb-4">{error}</p>
                         <button
                             onClick={fetchAllTransactions}
                             className="flex items-center gap-2 mx-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                         >
-                            <LuRotateCcw size={16} />
+                            <FaSync size={16} />
                             Retry
                         </button>
                     </div>
