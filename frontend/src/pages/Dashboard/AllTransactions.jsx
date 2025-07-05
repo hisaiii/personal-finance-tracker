@@ -34,18 +34,17 @@ const AllTransactions = () => {
             const response = await axiosInstance.get(API_PATHS.DASHBOARD.GET_DATA);
             if (response.data) {
                 // Combine all transactions from different sources
-                const combinedTransactions = [
+                const Transactions = [
                     ...(response.data.recentTransactions || []),
-                    ...(response.data.last30DaysExpenses?.transactions || []),
-                    ...(response.data.last60DaysIncome?.transactions || [])
+
                 ];
                 
                 // Remove duplicates based on _id
-                const uniqueTransactions = combinedTransactions.filter((transaction, index, self) =>
-                    index === self.findIndex(t => t._id === transaction._id)
-                );
+                // const uniqueTransactions = combinedTransactions.filter((transaction, index, self) =>
+                //     index === self.findIndex(t => t._id === transaction._id)
+                // );
                 
-                setAllTransactions(uniqueTransactions);
+                setAllTransactions(Transactions);
             }
         } catch (err) {
             console.error("All transactions fetch error:", err);
@@ -60,29 +59,29 @@ const AllTransactions = () => {
         fetchAllTransactions();
     }, []);
 
-    // Delete transaction function
-    const handleDeleteTransaction = async (transactionId) => {
-        if (window.confirm('Are you sure you want to delete this transaction?')) {
-            try {
-                // API call to delete transaction
-                await axiosInstance.delete(`${API_PATHS.TRANSACTIONS.DELETE}/${transactionId}`);
+    // // Delete transaction function
+    // const handleDeleteTransaction = async (transactionId) => {
+    //     if (window.confirm('Are you sure you want to delete this transaction?')) {
+    //         try {
+    //             // API call to delete transaction
+    //             await axiosInstance.delete(`${API_PATHS.TRANSACTIONS.DELETE}/${transactionId}`);
                 
-                // Update local state
-                setAllTransactions(prevTransactions => 
-                    prevTransactions.filter(t => t._id !== transactionId)
-                );
-            } catch (err) {
-                console.error("Delete transaction error:", err);
-                alert("Failed to delete transaction");
-            }
-        }
-    };
+    //             // Update local state
+    //             setAllTransactions(prevTransactions => 
+    //                 prevTransactions.filter(t => t._id !== transactionId)
+    //             );
+    //         } catch (err) {
+    //             console.error("Delete transaction error:", err);
+    //             alert("Failed to delete transaction");
+    //         }
+    //     }
+    // };
 
     // Preview transaction function
-    const handlePreviewTransaction = (transaction) => {
-        console.log("Preview transaction:", transaction);
-        // Yahan aap modal open kar sakte hain
-    };
+    // const handlePreviewTransaction = (transaction) => {
+    //     console.log("Preview transaction:", transaction);
+    //     // Yahan aap modal open kar sakte hain
+    // };
 
     // Filter and sort transactions
     const getFilteredTransactions = () => {
@@ -220,8 +219,8 @@ const AllTransactions = () => {
                                         amount={addThousandSeparator(transaction.amount)}
                                         type={transaction.type}
                                         imageUrl={transaction.imageUrl}
-                                        onDelete={() => handleDeleteTransaction(transaction._id)}
-                                        onPreview={() => handlePreviewTransaction(transaction)}
+                                        // onDelete={() => handleDeleteTransaction(transaction._id)}
+                                        // onPreview={() => handlePreviewTransaction(transaction)}
                                     />
                                 ))}
                             </div>
