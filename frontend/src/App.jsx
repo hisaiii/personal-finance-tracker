@@ -16,7 +16,6 @@ import { UserProvider } from "./context/UserContext";
 import { SplitwiseProvider } from "./context/SplitwiseContext"; // import kara
 import { Toaster } from "react-hot-toast";
 import Logout from "./pages/Auth/Logout";
-import Recent from "./pages/Dashboard/Recent";
 import AllTransactions from "./pages/Dashboard/AllTransactions";
 const App = () => {
   return (
