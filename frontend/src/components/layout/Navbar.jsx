@@ -31,7 +31,7 @@ const { splitwiseData, setSplitwiseData, splitwiseLoading, setSplitwiseLoading }
 
   // Connect
   const handleSplitwiseConnect = () => {
-    window.location.href = `${'http://localhost:8000'}/api/v1/splitwise/connect`;
+    window.location.href = `${'https://personal-finance-tracker-8tdm.onrender.com'}/api/v1/splitwise/connect`;
   };
 
   // Disconnect
