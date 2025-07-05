@@ -1,6 +1,6 @@
 import { LuLayoutDashboard, LuWalletMinimal, LuHandCoins, LuLogOut } from "react-icons/lu";
-import { VscDebugDisconnect } from "react-icons/vsc";   
 import { RiMoneyRupeeCircleFill } from "react-icons/ri";
+import { TbTransactionRupee } from "react-icons/tb";
 
 export const SIDE_MENU_DATA = [
   {
@@ -23,6 +23,13 @@ export const SIDE_MENU_DATA = [
   },
   {
     id:"04",
+    label:"All Transactions",
+    icon:TbTransactionRupee ,
+    path:"/all",
+
+  },
+  {
+    id:"05",
     label:"Splitwise",
     icon:RiMoneyRupeeCircleFill
 ,
