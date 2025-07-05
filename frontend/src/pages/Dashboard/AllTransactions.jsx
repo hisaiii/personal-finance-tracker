@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import TransactionInfoCard from '../../components/Cards/TransactionInfoCard';
 import { useUserAuth } from '../../hooks/useUserAuth';
-import axiosInstance from '../../utils/axiosInstance'; // Ye import add karna hoga
-import { API_PATHS } from '../../utils/constants'; // Ye import add karna hoga
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths'; 
 import moment from 'moment';
 import { addThousandSeparator } from '../../utils/helper';
 import { 
