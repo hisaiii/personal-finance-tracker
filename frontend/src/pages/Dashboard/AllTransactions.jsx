@@ -23,35 +23,34 @@ const AllTransactions = () => {
     const [filterType, setFilterType] = useState('all');
     const [sortBy, setSortBy] = useState('date');
 
-    const fetchAllTransactions = async () => {
-        if (loading) return;
-        setLoading(true);
-        setError(null);
-        try {
-            // Fetch all transactions - you might need to create a separate endpoint
-            // For now, using dashboard data and combining all transactions
-            const response = await axiosInstance.get(API_PATHS.DASHBOARD.GET_DATA);
-            if (response.data) {
-                // Combine all transactions from different sources
-                const Transactions = [
-                    ...(response.data.recentTransactions || []),
+  const fetchAllTransactions = async () => {
+  if (loading) return;
+  setLoading(true);
+  setError(null);
+  try {
+    const [incomeResponse, expenseResponse] = await Promise.all([
+      axiosInstance.get(API_PATHS.INCOME.GET_ALL_INCOME),
+      axiosInstance.get(API_PATHS.EXPENSE.GET_ALL_EXPENSE),
+    ]);
 
-                ];
+    const incomeTransactions = incomeResponse.data || [];
+    const expenseTransactions = expenseResponse.data || [];
 
-                // Remove duplicates based on _id
-                // const uniqueTransactions = combinedTransactions.filter((transaction, index, self) =>
-                //     index === self.findIndex(t => t._id === transaction._id)
-                // );
+    // combine dono
+    const combinedTransactions = [
+      ...incomeTransactions.map(item => ({ ...item, type: "income" })),
+      ...expenseTransactions.map(item => ({ ...item, type: "expense" })),
+    ];
 
-                setAllTransactions(Transactions);
-            }
-        } catch (err) {
-            console.error("All transactions fetch error:", err);
-            setError("Failed to fetch transactions");
-        } finally {
-            setLoading(false);
-        }
-    };
+    setAllTransactions(combinedTransactions);
+  } catch (err) {
+    console.error("All transactions fetch error:", err);
+    setError("Failed to fetch transactions");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
     // Component mount hone pe data fetch karo
     useEffect(() => {
