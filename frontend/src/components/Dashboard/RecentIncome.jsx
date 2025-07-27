@@ -26,7 +26,7 @@ const RecentIncome = ({ data, onSeeMore }) => {
     />
   ))
 ) : (
-  <p className="text-sm text-gray-500 text-center">No expense data found.</p>
+  <p className="text-sm text-gray-500 text-center">No income data found.</p>
 )}
 
       </div>
