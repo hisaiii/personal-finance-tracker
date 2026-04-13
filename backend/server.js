@@ -12,7 +12,7 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import path from 'path';
-
+import passport from './config/splitwiseOAuth2.js'
 // Load environment variables
 dotenv.config();
 
@@ -47,36 +47,12 @@ app.use(session({
   }
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize());//without this passport.authenticate wontwork
+app.use(passport.session()); //Ye session-based login persistence enable karta hai.
+//means once logged in then also after refreshing browser still logged in
 
-// Fixed OAuth2 Strategy
-passport.use(
-  new OAuth2Strategy(
-    {
-      authorizationURL: 'https://secure.splitwise.com/oauth/authorize',
-      tokenURL: 'https://secure.splitwise.com/oauth/token',
-      clientID: process.env.SPLITWISE_CONSUMER_KEY,
-      clientSecret: process.env.SPLITWISE_CONSUMER_SECRET,
-      callbackURL: process.env.CALLBACK_URL,
-    },
-    // This function should return user data, not handle redirects
-    async function (accessToken, refreshToken, profile, done) {
-      try {
-        // You can fetch user data from Splitwise here if needed
-        const user = {
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          profile: profile
-        };
 
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  )
-);
+
 
 passport.serializeUser(function (user, done) {
   done(null, user);
