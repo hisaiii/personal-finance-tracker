@@ -5,7 +5,7 @@ import session from 'express-session';
 import passport from 'passport';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import RedisStore from 'connect-redis';
+import {RedisStore} from 'connect-redis';
 
 import connectDB from './config/db.js';
 import getRedisClient from './config/redis.js';
