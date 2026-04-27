@@ -5,7 +5,7 @@ import session from 'express-session';
 import passport from 'passport';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import {RedisStore} from 'connect-redis';
+import RedisStore from 'connect-redis';
 
 import connectDB from './config/db.js';
 import getRedisClient from './config/redis.js';
@@ -42,7 +42,7 @@ app.use(express.json());
 
 // ── Session (ONE only, with Redis store) ───────────────
 app.use(session({
-  store: new RedisStore({ client: redis }), // ✅ redis is declared above
+ store: new RedisStore({ client: redis, prefix: 'finesight:sess:' }), // ✅ redis is declared above
   secret: process.env.SESSION_SECRET || 'finesight-secret',
   resave: false,
   saveUninitialized: true,
