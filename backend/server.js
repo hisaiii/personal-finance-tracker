@@ -1,98 +1,87 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import connectDB from './config/db.js';
-import authRoutes from './routes/authRoutes.js'
-import { fileURLToPath } from 'url'
-import incomeRoutes from './routes/incomeRoutes.js'
-import expenseRoutes from './routes/expenseRoutes.js' // Fixed typo: exopenseRoutes -> expenseRoutes
-import dashboardRoutes from './routes/dashboardRoutes.js'
-import splitwiseRoutes from './routes/splitwiseRoutes.js';
 import session from 'express-session';
 import passport from 'passport';
-import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import path from 'path';
-import './config/splitwiseOAuth2.js'
-// Load environment variables
+import { fileURLToPath } from 'url';
+import RedisStore from 'connect-redis';
+
+import connectDB from './config/db.js';
+import getRedisClient from './config/redis.js';
+import authRoutes from './routes/authRoutes.js';
+import incomeRoutes from './routes/incomeRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import splitwiseRoutes from './routes/splitwiseRoutes.js';
+import './config/splitwiseOAuth2.js';
+
 dotenv.config();
 
 const app = express();
-const _dirname = path.resolve()
+const _dirname = path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// 👉 Middleware to handle CORS
+// ── Connect DB and Redis FIRST ─────────────────────────
+connectDB();
+const redis = getRedisClient(); // ✅ declared before it's used below
+
+// ── CORS ───────────────────────────────────────────────
 app.use(cors({
   origin: "https://personal-finance-tracker-8tdm.onrender.com",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true // Important for sessions
+  credentials: true,
 }));
 
-// 👉 Middleware to parse JSON requests
+// ── Body parser ────────────────────────────────────────
 app.use(express.json());
 
-connectDB();
-
-// 👉 Setup the port
-const PORT = process.env.PORT || 5000;
-
-// Session middleware - configure before passport
+// ── Session (ONE only, with Redis store) ───────────────
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'splitwise-secret-key-change-in-production',
+  store: new RedisStore({ client: redis }), // ✅ redis is declared above
+  secret: process.env.SESSION_SECRET || 'finesight-secret',
   resave: false,
-  saveUninitialized: false, // Changed to false for better security
+  saveUninitialized: false,
   cookie: {
-    secure: false, // Set to true in production with HTTPS
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  },
 }));
 
-app.use(passport.initialize());//without this passport.authenticate wontwork
-app.use(passport.session()); //Ye session-based login persistence enable karta hai.
-//means once logged in then also after refreshing browser still logged in
+// ── Passport ───────────────────────────────────────────
+app.use(passport.initialize());
+app.use(passport.session());
 
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
 
+// ── API Routes ─────────────────────────────────────────
+app.use("/api/v1/auth",      authRoutes);
+app.use("/api/v1/income",    incomeRoutes);
+app.use("/api/v1/expense",   expenseRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
+app.use("/api/v1/splitwise", splitwiseRoutes);
 
+// ── Static files ───────────────────────────────────────
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(_dirname, "frontend/dist")));
 
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (obj, done) {
-  done(null, obj);
-});
-
-// API Routes - These must come FIRST
-app.use("/api/v1/auth", authRoutes)
-app.use("/api/v1/income", incomeRoutes)
-app.use("/api/v1/expense", expenseRoutes) // Fixed variable name
-app.use("/api/v1/dashboard", dashboardRoutes)
-app.use('/api/v1/splitwise', splitwiseRoutes);
-
-// ES Module fix for __dirname
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-// Serve uploads folder
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
-
-// Serve static files from frontend build
-app.use(express.static(path.join(_dirname, "frontend/dist")))
-
-// Error handling middleware - MUST come before catch-all route
+// ── Error handler ──────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Catch-all route - MUST be the very last route
-// Only serve index.html for non-API routes
+// ── SPA catch-all (must be last) ──────────────────────
 app.get(/^(?!\/api).*/, (req, res) => {
-  // This regex matches all routes that don't start with '/api'
-  res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"))
-})
+  res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"));
+});
 
-// 👉 Start the server
-app.listen(PORT,'0.0.0.0', () => {
+// ── Start server ───────────────────────────────────────
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });

@@ -39,13 +39,15 @@ export const getDashboardData = async (req, res) => {
 
     //revise once
     const lastTransactions = [
-      ...(await Income.find({ userId }).sort({ date: -1 }).limit(5)).map(
+      ...(await Income.find({ userId }).sort({ date: -1 }).limit(5))
+      .map(
         (txn) => ({
           ...txn.toObject(),
           type: "income",
         })
       ),
-      ...(await Expense.find({ userId }).sort({ date: -1 }).limit(5)).map(
+      ...(await Expense.find({ userId }).sort({ date: -1 }).limit(5))
+      .map(
         (txn) => ({
           ...txn.toObject(),
           type: "expense",
