@@ -43,9 +43,9 @@ app.use(session({
   store: new RedisStore({ client: redis }), // ✅ redis is declared above
   secret: process.env.SESSION_SECRET || 'finesight-secret',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: auto,
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
