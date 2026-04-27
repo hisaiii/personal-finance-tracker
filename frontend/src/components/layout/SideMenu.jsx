@@ -3,16 +3,34 @@ import { SIDE_MENU_DATA } from "../../utils/data";
 import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import CharAvatar from '../Cards/charAvtar';
-
+import axios from 'axios';
 const SideMenu = ({ activeMenu }) => {
     const { user, clearUser } = useContext(UserContext);
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.clear();
-        clearUser();
-        navigate("/login");
-    };
+    // const handleLogout = () => {
+    //     localStorage.clear();
+    //     clearUser();
+    //     navigate("/login");
+    // };
+
+    const handleLogout = async () => {
+  try {
+    // ✅ tell server to destroy session + clear Redis cache
+    await axios.post('/api/v1/auth/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  } catch (err) {
+    console.warn('Logout error:', err.message);
+  } finally {
+    // always clear local data even if API fails
+    localStorage.clear();
+    clearUser();
+    navigate("/login");
+  }
+};
 
     const handleClick = (route) => {
         if (route === "logout" || route === "/logout") {

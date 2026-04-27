@@ -85,3 +85,31 @@ export const getUserInfo = async (req, res) => {
             .json({ message: "Error registering user", error: err.message })
     } 
 }
+
+// add this at the bottom of authController.js
+import { invalidateCache, CacheKeys } from '../middleware/cache.js';
+
+export const logoutUser = async (req, res) => {
+  try {
+    const userId = req.user?._id?.toString() || req.user?.id;
+
+    // clear all cached data for this user
+    if (userId) {
+      await invalidateCache(
+        CacheKeys.userProfile(userId),
+        CacheKeys.dashboard(userId),
+        CacheKeys.allIncome(userId),
+        CacheKeys.allExpense(userId),
+      );
+    }
+
+    // destroy session — clears Splitwise token from Redis
+    req.session.destroy((err) => {
+      if (err) console.warn('[Logout] Session destroy error:', err.message);
+    });
+
+    res.json({ message: 'Logged out successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error during logout' });
+  }
+};
