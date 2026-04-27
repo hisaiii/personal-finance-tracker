@@ -5,6 +5,7 @@ import { CacheKeys } from './cache.js';
 
 const USER_CACHE_TTL = 600; // 10 minutes
 
+// in authMiddleware.js, replace the full protect function
 export const protect = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
@@ -22,15 +23,22 @@ export const protect = async (req, res, next) => {
     // 1. Try Redis first
     try {
       const cached = await redis.get(cacheKey);
-      if (cached) user = JSON.parse(cached);
+      if (cached) {
+        user = JSON.parse(cached); // plain object from Redis
+      }
     } catch (err) {
       console.warn('[Auth] Redis miss, going to DB');
     }
 
     // 2. Cache miss → hit MongoDB
     if (!user) {
-      user = await User.findById(userId).select('-password').lean();
-      if (!user) return res.status(401).json({ message: 'User not found' });
+      const dbUser = await User.findById(userId).select('-password'); // no .lean()
+      if (!dbUser) return res.status(401).json({ message: 'User not found' });
+
+      // store plain object in Redis with both id and _id
+      user = dbUser.toObject();
+      user.id = dbUser.id; // ✅ explicitly copy virtual id field
+
       try {
         await redis.setex(cacheKey, USER_CACHE_TTL, JSON.stringify(user));
       } catch (_) {}
