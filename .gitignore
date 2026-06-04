@@ -1,5 +1,15 @@
-# Ignore all node_modules folders
+# Dependencies
 **/node_modules/
 
-# Ignore all .env files
-**/.env
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build files
+frontend/dist
+dist
+build
+
+# Logs
+*.log
