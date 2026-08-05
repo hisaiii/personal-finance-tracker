@@ -23,12 +23,13 @@ export const getRedisClient = () => {
             return Math.min(times * 100, 3000);
           },
         });
-
+//this is event listener
     redisClient.on('connect', () => console.log('[Redis] Connected'));
     redisClient.on('error', (err) => console.error('[Redis] Error:', err.message));
   }
   return redisClient;
 };
+
 
 process.on('SIGTERM', async () => {
   if (redisClient) await redisClient.quit();

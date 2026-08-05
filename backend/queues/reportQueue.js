@@ -22,6 +22,7 @@ export const reportQueue = new Bull('report-generation', REDIS_URL, {
 const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 
+//expense queue worker
 reportQueue.process('expense-report', async (job) => {
   const { userId } = job.data;
   const expenses = await Expense.find({ userId }).sort({ date: -1 });
@@ -37,6 +38,7 @@ reportQueue.process('expense-report', async (job) => {
   return { filePath: outputPath };
 });
 
+//income queue worker
 reportQueue.process('income-report', async (job) => {
   const { userId } = job.data;
   const income = await Income.find({ userId }).sort({ date: -1 });

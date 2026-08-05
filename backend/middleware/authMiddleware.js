@@ -36,6 +36,7 @@ export const protect = async (req, res, next) => {
       if (!dbUser) return res.status(401).json({ message: 'User not found' });
 
       // store plain object in Redis with both id and _id
+      //redis me direct mongoose doc nhi store karna isliye object banake bhejo
       user = dbUser.toObject();
       user.id = dbUser.id; // ✅ explicitly copy virtual id field
 

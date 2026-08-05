@@ -14,7 +14,7 @@ export const addExpense = async (req, res) => {
       userId, icon, category, amount, date: new Date(date), imageUrl,
     });
 
-    // bust stale cache
+    // deletes cache for older data ...iske bad firse naya data cache hoga
     await invalidateCache(CacheKeys.allExpense(userId), CacheKeys.dashboard(userId));
     res.status(200).json(newExpense);
   } catch (err) {

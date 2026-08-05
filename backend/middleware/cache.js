@@ -33,6 +33,7 @@ export const cacheMiddleware = (keyFn, ttl = DEFAULT_TTL) => async (req, res, ne
 
   // 2. Intercept res.json to store response in cache
   const originalJson = res.json.bind(res);
+  
   res.json = (data) => {
     // fire and forget — do NOT await, do NOT make res.json async
     redis.setex(key, ttl, JSON.stringify(data))

@@ -1,7 +1,7 @@
 import getRedisClient from '../config/redis.js';
 
 export const rateLimiter = ({
-  windowMs = 60_000,
+  windowMs = 60_000, //in ms i.e 1 min
   max = 60,
   keyPrefix = 'rl',
 } = {}) => async (req, res, next) => {
