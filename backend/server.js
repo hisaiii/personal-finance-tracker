@@ -21,9 +21,9 @@ dotenv.config();
 const app = express();
 
 app.set('trust proxy', 1); // ← add this
-const _dirname = path.resolve();
+const _dirname = path.resolve(); //gives curr working directory complete path
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(__filename);  //gives the complete directory path in which this js file is there
 
 // ── Connect DB and Redis FIRST ─────────────────────────
 connectDB();
@@ -55,10 +55,10 @@ app.use(session({
 
 // ── Passport ───────────────────────────────────────────
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((obj, done) => done(null, obj));
+// passport.serializeUser((user, done) => done(null, user));
+// passport.deserializeUser((obj, done) => done(null, obj));
 
 // ── API Routes ─────────────────────────────────────────
 app.use("/api/v1/auth",      authRoutes);

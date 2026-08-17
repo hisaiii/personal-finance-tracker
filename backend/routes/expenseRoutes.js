@@ -11,7 +11,7 @@ import { apiLimiter, uploadLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
-router.use(apiLimiter);
+router.use(apiLimiter); //iske niche wali sari req pe apply hoga 
 router.post('/add',                    protect, addExpense);
 router.get('/get',                     protect, cacheMiddleware(CacheKeys.allExpense, 300), getAllExpense);
 router.get('/downloadexcel',           protect, downloadExpenseExcel);

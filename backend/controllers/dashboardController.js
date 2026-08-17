@@ -38,6 +38,10 @@ export const getDashboardData = async (req, res) => {
     );
 
     //revise once
+//     const lastTransactions = [
+//   ...incomeArray,
+//   ...expenseArray
+// ]
     const lastTransactions = [
       ...(await Income.find({ userId }).sort({ date: -1 }).limit(5))
       .map(

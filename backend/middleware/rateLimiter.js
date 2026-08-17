@@ -8,7 +8,7 @@ export const rateLimiter = ({
   const redis = getRedisClient();
   const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
   const key = `finesight:${keyPrefix}:${ip}`;
-  const windowSec = Math.ceil(windowMs / 1000);
+  const windowSec = Math.ceil(windowMs / 1000);  //converts ms into sec
 
   try {
     const pipeline = redis.pipeline();

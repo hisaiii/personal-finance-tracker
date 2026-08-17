@@ -18,7 +18,7 @@ export const cacheMiddleware = (keyFn, ttl = DEFAULT_TTL) => async (req, res, ne
 
   const key = keyFn(userId);
 
-  // 1. Try reading from cache
+  // 1. Try reading from cache agar ye chal gaya to yahi se res bhej dega , next controller(mongodb) tak jane ki jarurat nhi
   try {
     const cached = await redis.get(key);
     if (cached) {
