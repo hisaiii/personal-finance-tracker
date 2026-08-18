@@ -96,23 +96,80 @@ const Income = () => {
       console.error("Error deleting income", error.response?.data?.message || error.message)
     }
   }
-  const handleDownloadIncomeDetails = async () => {
-    try {
-      const response = await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME, { responseType: "blob", })
-      const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute("download", "income_details.xlsx");
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading income details:", error);
-      toast.error("Failed to download income details. Please try again.");
-    }
-  }
+  // const handleDownloadIncomeDetails = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME, { responseType: "blob", })
+  //     const url = window.URL.createObjectURL(new Blob([response.data]))
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.setAttribute("download", "income_details.xlsx");
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.parentNode.removeChild(link);
+  //     window.URL.revokeObjectURL(url);
+  //   } catch (error) {
+  //     console.error("Error downloading income details:", error);
+  //     toast.error("Failed to download income details. Please try again.");
+  //   }
+  // }
+const handleDownloadIncomeDetails = async () => {
+  try {
+    // Step 1: Create report generation job
+    const response = await axiosInstance.get(
+      API_PATHS.INCOME.DOWNLOAD_INCOME
+    );
 
+    const { jobId } = response.data;
+
+    // Step 2: Check job status
+    const checkReportStatus = async () => {
+      try {
+        const statusResponse = await axiosInstance.get(
+          `/api/v1/income/report/status/${jobId}`,
+          {
+            responseType: "blob",
+          }
+        );
+
+        const contentType = statusResponse.headers["content-type"];
+
+        // Excel file is ready
+        if (
+          contentType?.includes(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          )
+        ) {
+          const url = window.URL.createObjectURL(statusResponse.data);
+
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "income_details.xlsx");
+
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+
+          window.URL.revokeObjectURL(url);
+
+          return;
+        }
+
+        // Job is still processing
+        setTimeout(checkReportStatus, 1000);
+
+      } catch (error) {
+        console.error("Error checking report status:", error);
+        toast.error("Failed to generate income report.");
+      }
+    };
+
+    checkReportStatus();
+
+  } catch (error) {
+    console.error("Error starting report generation:", error);
+    toast.error("Failed to start report generation.");
+  }
+};
 return (
   <DashboardLayout activeMenu="Income">
     <div className="my-5 mx-auto">

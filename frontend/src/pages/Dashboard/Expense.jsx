@@ -78,25 +78,82 @@ const Expense = () => {
     }
   }
 
-  const handleDownloadExpenseDetails = async () => {
-    try {
-      const response = await axiosInstance.get(API_PATHS.EXPENSE.DOWNLOAD_EXPENSE, {
-        responseType: "blob",
-      })
-      const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement('a')
-      link.href = url
-      link.setAttribute("download", "expense_details.xlsx")
-      document.body.appendChild(link)
-      link.click()
-      link.parentNode.removeChild(link)
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error("Error downloading expense details:", error)
-      toast.error("Failed to download expense details. Please try again.")
-    }
-  }
+  // const handleDownloadExpenseDetails = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(API_PATHS.EXPENSE.DOWNLOAD_EXPENSE, {
+  //       responseType: "blob",
+  //     })
+  //     const url = window.URL.createObjectURL(new Blob([response.data]))
+  //     const link = document.createElement('a')
+  //     link.href = url
+  //     link.setAttribute("download", "expense_details.xlsx")
+  //     document.body.appendChild(link)
+  //     link.click()
+  //     link.parentNode.removeChild(link)
+  //     window.URL.revokeObjectURL(url)
+  //   } catch (error) {
+  //     console.error("Error downloading expense details:", error)
+  //     toast.error("Failed to download expense details. Please try again.")
+  //   }
+  // }
+const handleDownloadExpenseDetails = async () => {
+  try {
+    // Step 1: Create expense report generation job
+    const response = await axiosInstance.get(
+      API_PATHS.EXPENSE.DOWNLOAD_EXPENSE
+    );
 
+    const { jobId } = response.data;
+
+    // Step 2: Check job status
+    const checkReportStatus = async () => {
+      try {
+        const statusResponse = await axiosInstance.get(
+          `/api/v1/expense/report/status/${jobId}`,
+          {
+            responseType: "blob",
+          }
+        );
+
+        const contentType = statusResponse.headers["content-type"];
+
+        // Excel file is ready
+        if (
+          contentType?.includes(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          )
+        ) {
+          const url = window.URL.createObjectURL(statusResponse.data);
+
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "expense_details.xlsx");
+
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+
+          window.URL.revokeObjectURL(url);
+
+          return;
+        }
+
+        // Job is still processing
+        setTimeout(checkReportStatus, 1000);
+
+      } catch (error) {
+        console.error("Error checking expense report status:", error);
+        toast.error("Failed to generate expense report.");
+      }
+    };
+
+    checkReportStatus();
+
+  } catch (error) {
+    console.error("Error starting expense report:", error);
+    toast.error("Failed to start expense report.");
+  }
+};
 return (
   <DashboardLayout activeMenu="Expense">
     <div className="my-5 mx-auto">
